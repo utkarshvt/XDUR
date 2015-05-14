@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="P-PaxosSTM" default="build" basedir=".">
+	<property name="sources" location="${basedir}/src" />
+	<property name="classes" location="${basedir}/bin" />
+	<property name="javadoc" location="${basedir}/doc/javadoc" />
+	<property name="version" value="1.0" />
+	<property name="report.dir" value="${classes}/junitreport" />
+
+	<target name="clean">
+		<delete dir="${classes}" />
+		<delete dir="${javadoc}" />
+		<delete file="ppaxos.jar" />
+	</target>
+
+	<!--
+	<target name="build" depends="checkstyle">
+	-->
+	<target name="build" depends="clean">
+		<mkdir dir="${classes}" />
+		<javac srcdir="${sources}" destdir="${classes}" debug="on" debuglevel="lines,vars,source" includeantruntime="false" target="1.6" source="1.6">
+			<classpath>
+				<pathelement location="${classes}" />
+				<fileset dir="lib" includes="**/*.jar" />
+			</classpath>
+			<include name="**/*.java" />
+			<compilerarg value="-Xlint:deprecation" />
+		</javac>
+	</target>
+
+	<target name="javadoc" description="Create Javadocs">
+		<mkdir dir="${javadoc}" />
+		<javadoc destdir="${javadoc}">
+			<fileset dir="${sources}" includes="**/*.java" />
+		</javadoc>
+	</target>
+
+	<target name="jar" depends="build" description="Build a jar file with the library">
+		<jar destfile="ppaxos.jar" basedir="${classes}" />
+	</target>
+
+
+	<target name="junitreport">
+		<junitreport todir="${report.dir}">
+			<fileset dir="${report.dir}" includes="TEST-*.xml" />
+			<report todir="${report.dir}" />
+		</junitreport>
+	</target>
+
+</project>
